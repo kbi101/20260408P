@@ -1,0 +1,70 @@
+persistence:
+  defaultStore: default
+  visibilityStore: visibility
+  numHistoryShards: 4
+  datastores:
+    default:
+      sql:
+        pluginName: "postgres"
+        databaseName: "crystal_db"
+        connectAttributes:
+          search_path: "temporal"
+        user: "postgres"
+        password: "REPLACED_FOR_GITHUB"
+        host: "host.docker.internal"
+        port: 5432
+        maxConns: 20
+        maxIdleConns: 10
+        maxConnLifetime: "1h"
+    visibility:
+      sql:
+        pluginName: "postgres"
+        databaseName: "crystal_db"
+        connectAttributes:
+          search_path: "temporal_visibility"
+        user: "postgres"
+        password: "REPLACED_FOR_GITHUB"
+        host: "host.docker.internal"
+        port: 5432
+        maxConns: 10
+        maxIdleConns: 5
+        maxConnLifetime: "1h"
+
+global:
+  membership:
+    maxJoinDuration: 30s
+    broadcastAddress: "127.0.0.1"
+  pprof:
+    port: 7936
+
+services:
+  frontend:
+    rpc:
+      grpcPort: 7233
+      membershipPort: 6933
+      bindAddress: "0.0.0.0"
+  history:
+    rpc:
+      grpcPort: 7234
+      membershipPort: 6934
+      bindAddress: "0.0.0.0"
+  matching:
+    rpc:
+      grpcPort: 7235
+      membershipPort: 6935
+      bindAddress: "0.0.0.0"
+  worker:
+    rpc:
+      grpcPort: 7239
+      membershipPort: 6939
+      bindAddress: "0.0.0.0"
+
+clusterMetadata:
+  enableGlobalNamespace: false
+  failoverVersionIncrement: 10
+  masterClusterName: "active"
+  currentClusterName: "active"
+  clusterInformation:
+    active:
+      enabled: true
+      initialFailoverVersion: 1

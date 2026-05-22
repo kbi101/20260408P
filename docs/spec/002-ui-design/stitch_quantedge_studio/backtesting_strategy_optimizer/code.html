@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quant Studio | Backtesting Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#00668a",
+                        "on-tertiary-fixed": "#002113",
+                        "on-primary-container": "#008abb",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "primary": "#7bd0ff",
+                        "secondary-container": "#3e495d",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-primary": "#00354a",
+                        "background": "#0b1326",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "tertiary-container": "#001c10",
+                        "surface-container": "#171f33",
+                        "surface-container-highest": "#2d3449",
+                        "surface-bright": "#31394d",
+                        "primary-fixed": "#c4e7ff",
+                        "on-tertiary-container": "#009365",
+                        "surface-container-high": "#222a3d",
+                        "on-surface": "#dae2fd",
+                        "outline": "#909097",
+                        "on-error-container": "#ffdad6",
+                        "surface": "#0b1326",
+                        "surface-container-low": "#131b2e",
+                        "surface-variant": "#2d3449",
+                        "inverse-surface": "#dae2fd",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "surface-tint": "#7bd0ff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-primary-fixed": "#001e2c",
+                        "on-background": "#dae2fd",
+                        "on-tertiary": "#003824",
+                        "on-secondary": "#263143",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "primary-container": "#001a27",
+                        "tertiary": "#4edea3",
+                        "outline-variant": "#45464d",
+                        "surface-dim": "#0b1326",
+                        "inverse-on-surface": "#283044",
+                        "secondary-fixed": "#d8e3fb",
+                        "surface-container-lowest": "#060e20",
+                        "secondary": "#bcc7de",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-secondary-container": "#aeb9d0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b1326; color: #dae2fd; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .ripple-pulse {
+            position: relative;
+        }
+        .ripple-pulse::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #4edea3;
+            border-radius: 50%;
+            opacity: 0.4;
+            transform: scale(1);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="flex overflow-hidden">
+<!-- SideNavBar Anchor -->
+<aside class="h-screen w-64 border-r border-slate-800/50 bg-slate-950 flex flex-col sticky left-0 top-0 overflow-y-auto z-50">
+<div class="p-6 border-b border-slate-800/50">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed text-lg" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<h1 class="font-headline font-bold text-slate-100 text-base leading-tight">Quant Studio</h1>
+<p class="text-[10px] text-slate-500 font-mono tracking-widest">v4.2.1-stable</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-4">
+<div class="px-3 mb-2">
+<button class="w-full py-2.5 bg-primary text-on-primary-fixed font-headline font-bold rounded-lg flex items-center justify-center gap-2 active:scale-95 duration-75 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Strategy
+                </button>
+</div>
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 transition-all hover:bg-slate-900/50 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-75" data-icon="database">database</span>
+<span class="font-medium text-sm">Data Explorer</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 transition-all hover:bg-slate-900/50 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-75" data-icon="science">science</span>
+<span class="font-medium text-sm">Research Lab</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-900 text-sky-400 border-l-2 border-sky-400 font-medium text-sm transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>Backtesting</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 transition-all hover:bg-slate-900/50 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-75" data-icon="query_stats">query_stats</span>
+<span class="font-medium text-sm">Live Trading</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="mt-auto border-t border-slate-800/50 p-4 space-y-1">
+<a class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-slate-300 transition-all text-xs" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+<span>Terminal</span>
+</a>
+<a class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-slate-300 transition-all text-xs" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="menu_book">menu_book</span>
+<span>Docs</span>
+</a>
+<a class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-slate-300 transition-all text-xs" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="contact_support">contact_support</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden bg-background">
+<!-- TopAppBar Anchor -->
+<header class="w-full h-14 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-md flex justify-between items-center px-6 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="font-headline tracking-tighter text-lg font-bold text-sky-400">Kinetic Ledger</span>
+<nav class="hidden md:flex items-center gap-6 h-full">
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-sm font-medium" href="#">System Status</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-sm font-medium" href="#">Network</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-sm font-medium" href="#">Compute</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-slate-900/50 border border-slate-800/50 rounded px-2 py-1">
+<span class="material-symbols-outlined text-slate-500 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs text-slate-300 w-48" placeholder="Search parameters..." type="text"/>
+</div>
+<button class="p-2 text-slate-400 hover:bg-slate-800/50 rounded transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-slate-800/50 rounded transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-slate-400" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Canvas Content -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Column: Performance Insights -->
+<section class="flex-1 flex flex-col overflow-y-auto p-6 space-y-6">
+<!-- Header Stats Area -->
+<div class="flex items-end justify-between">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h2 class="text-2xl font-headline font-bold text-on-surface">Momentum Mean Reversion <span class="text-sky-400 font-mono text-sm ml-2">#ST-882</span></h2>
+<span class="px-2 py-0.5 rounded text-[10px] bg-tertiary-container text-tertiary border border-tertiary/20 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+                                OPTIMIZED
+                            </span>
+</div>
+<p class="text-on-surface-variant text-sm">Equities Multi-Factor Strategy • Period: 2020-01-01 to 2023-12-31</p>
+</div>
+<div class="flex gap-4">
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Total Return</p>
+<p class="text-2xl font-headline font-bold text-tertiary">+142.84%</p>
+</div>
+<div class="text-right border-l border-outline-variant/20 pl-4">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Alpha</p>
+<p class="text-2xl font-headline font-bold text-primary">8.2%</p>
+</div>
+</div>
+</div>
+<!-- Main Performance Chart -->
+<div class="bg-surface-container-low rounded-lg p-6 min-h-[400px] flex flex-col relative group">
+<div class="flex justify-between items-center mb-6">
+<div class="flex gap-6">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-xs font-medium text-on-surface">Strategy Returns</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-surface-variant"></div>
+<span class="text-xs font-medium text-on-surface-variant">S&amp;P 500 Benchmark</span>
+</div>
+</div>
+<div class="flex bg-surface-container-highest rounded p-0.5">
+<button class="px-3 py-1 text-[10px] font-bold bg-surface-bright rounded text-on-surface">1D</button>
+<button class="px-3 py-1 text-[10px] font-bold text-on-surface-variant">1W</button>
+<button class="px-3 py-1 text-[10px] font-bold text-on-surface-variant">1M</button>
+<button class="px-3 py-1 text-[10px] font-bold text-on-surface-variant">ALL</button>
+</div>
+</div>
+<!-- Chart Placeholder with custom SVG for aesthetic accuracy -->
+<div class="flex-1 relative overflow-hidden">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 300">
+<!-- Background Grid -->
+<g class="stroke-outline-variant/10 stroke-1">
+<line x1="0" x2="800" y1="50" y2="50"></line>
+<line x1="0" x2="800" y1="100" y2="100"></line>
+<line x1="0" x2="800" y1="150" y2="150"></line>
+<line x1="0" x2="800" y1="200" y2="200"></line>
+<line x1="0" x2="800" y1="250" y2="250"></line>
+</g>
+<!-- Benchmark Line -->
+<path d="M0,250 L100,240 L200,245 L300,230 L400,235 L500,210 L600,220 L700,205 L800,210" fill="none" stroke="#2d3449" stroke-width="2"></path>
+<!-- Strategy Line (Liquid Crystal Gradient Feel) -->
+<defs>
+<lineargradient id="chartGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#7bd0ff" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#7bd0ff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,250 L50,230 L100,210 L150,225 L200,180 L250,160 L300,175 L350,130 L400,110 L450,120 L500,80 L550,95 L600,60 L650,45 L700,55 L750,30 L800,40" fill="url(#chartGradient)"></path>
+<path d="M0,250 L50,230 L100,210 L150,225 L200,180 L250,160 L300,175 L350,130 L400,110 L450,120 L500,80 L550,95 L600,60 L650,45 L700,55 L750,30 L800,40" fill="none" stroke="#7bd0ff" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<!-- Interactive Tooltip Overlay (Mock) -->
+<div class="absolute left-1/2 top-10 transform -translate-x-1/2 bg-surface-container-highest/90 backdrop-blur-md p-3 rounded-lg border border-outline-variant/30 shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+<p class="text-[10px] text-on-surface-variant font-mono mb-1">2022-10-15</p>
+<div class="flex items-center justify-between gap-4">
+<span class="text-xs text-on-surface">Equity:</span>
+<span class="text-xs font-mono text-tertiary font-bold">$1,420,892.20</span>
+</div>
+<div class="flex items-center justify-between gap-4">
+<span class="text-xs text-on-surface">Drawdown:</span>
+<span class="text-xs font-mono text-error font-bold">-2.14%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance Metrics Table -->
+<div class="bg-surface-container-low rounded-lg overflow-hidden">
+<div class="p-4 bg-surface-container-high flex justify-between items-center">
+<h3 class="font-headline font-bold text-sm tracking-wide">STATISTICAL PERFORMANCE</h3>
+<button class="text-sky-400 text-xs flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">download</span> Export CSV
+                        </button>
+</div>
+<div class="grid grid-cols-4 gap-px bg-outline-variant/10">
+<div class="bg-surface-container-low p-5">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase mb-2">Sharpe Ratio</p>
+<p class="text-2xl font-headline font-bold text-on-surface font-mono">2.48</p>
+<div class="mt-2 w-full h-1 bg-surface-container-highest rounded-full">
+<div class="w-[85%] h-full bg-tertiary rounded-full"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase mb-2">Sortino Ratio</p>
+<p class="text-2xl font-headline font-bold text-on-surface font-mono">3.12</p>
+<div class="mt-2 w-full h-1 bg-surface-container-highest rounded-full">
+<div class="w-[92%] h-full bg-tertiary rounded-full"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase mb-2">Win Rate</p>
+<p class="text-2xl font-headline font-bold text-tertiary font-mono">64.2%</p>
+<p class="text-[10px] text-on-surface-variant mt-2">1,242 Successful Trades</p>
+</div>
+<div class="bg-surface-container-low p-5">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase mb-2">Max Drawdown</p>
+<p class="text-2xl font-headline font-bold text-error font-mono">-14.8%</p>
+<p class="text-[10px] text-on-surface-variant mt-2">Duration: 14 Days</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Parameter Sweep Panel (Utility Blade) -->
+<aside class="w-80 bg-surface-container-low border-l border-slate-800/50 flex flex-col p-6 overflow-y-auto">
+<div class="mb-8">
+<h3 class="font-headline font-bold text-sm tracking-wide mb-4">PARAMETER SWEEP</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-6">Define simulation boundaries to identify optimal execution triggers.</p>
+<div class="space-y-6">
+<!-- Param 1 -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-xs font-bold text-on-surface uppercase tracking-tighter">Lookback Period</label>
+<span class="text-xs font-mono text-primary">10 — 50</span>
+</div>
+<div class="relative h-6 flex items-center">
+<div class="w-full h-1 bg-surface-container-highest rounded"></div>
+<div class="absolute left-[20%] right-[30%] h-1 bg-primary rounded"></div>
+<div class="absolute left-[20%] w-3 h-3 bg-white border-2 border-primary rounded-full -translate-x-1/2 cursor-pointer shadow-lg"></div>
+<div class="absolute right-[30%] w-3 h-3 bg-white border-2 border-primary rounded-full translate-x-1/2 cursor-pointer shadow-lg"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-[10px] font-mono text-on-surface-variant">5</span>
+<span class="text-[10px] font-mono text-on-surface-variant">100</span>
+</div>
+</div>
+<!-- Param 2 -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-xs font-bold text-on-surface uppercase tracking-tighter">Stop Loss %</label>
+<span class="text-xs font-mono text-primary">1% — 5%</span>
+</div>
+<div class="relative h-6 flex items-center">
+<div class="w-full h-1 bg-surface-container-highest rounded"></div>
+<div class="absolute left-[10%] right-[60%] h-1 bg-primary rounded"></div>
+<div class="absolute left-[10%] w-3 h-3 bg-white border-2 border-primary rounded-full -translate-x-1/2 cursor-pointer shadow-lg"></div>
+<div class="absolute right-[60%] w-3 h-3 bg-white border-2 border-primary rounded-full translate-x-1/2 cursor-pointer shadow-lg"></div>
+</div>
+</div>
+<!-- Param 3 -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-xs font-bold text-on-surface uppercase tracking-tighter">RSI Threshold</label>
+<div class="flex gap-2">
+<input class="w-10 bg-surface-container-highest border-none rounded text-[10px] font-mono text-center p-1 focus:ring-1 focus:ring-primary" type="text" value="30"/>
+<input class="w-10 bg-surface-container-highest border-none rounded text-[10px] font-mono text-center p-1 focus:ring-1 focus:ring-primary" type="text" value="70"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<input class="flex-1 accent-primary h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" type="range"/>
+</div>
+</div>
+<!-- Options -->
+<div class="pt-4 border-t border-outline-variant/20 space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded border-outline-variant bg-surface-container-highest text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+<span class="text-xs text-on-surface-variant group-hover:text-on-surface transition-colors">Monte Carlo Validation</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant bg-surface-container-highest text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+<span class="text-xs text-on-surface-variant group-hover:text-on-surface transition-colors">Adjust for Slippage</span>
+</label>
+</div>
+</div>
+</div>
+<div class="mt-auto space-y-4">
+<div class="bg-surface-container-highest/50 p-4 rounded border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Est. Runtime</span>
+<span class="text-[10px] font-mono text-tertiary">4.2s</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Iterations</span>
+<span class="text-[10px] font-mono text-primary">12,400</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-on-primary-container text-on-primary-fixed font-headline font-bold rounded flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined">play_arrow</span>
+                        RUN OPTIMIZER
+                    </button>
+</div>
+</aside>
+</div>
+<!-- System Status Bar -->
+<footer class="h-8 bg-surface-container-lowest border-t border-slate-800/50 px-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] font-mono text-on-surface-variant">ENGINE: ONLINE</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[10px] text-on-surface-variant">memory</span>
+<span class="text-[10px] font-mono text-on-surface-variant">CPU: 12%</span>
+</div>
+</div>
+<div class="flex items-center gap-4 text-[10px] font-mono text-on-surface-variant">
+<span>LATENCY: 14ms</span>
+<span class="text-primary">UTC 14:22:01</span>
+</div>
+</footer>
+</main>
+</body></html>

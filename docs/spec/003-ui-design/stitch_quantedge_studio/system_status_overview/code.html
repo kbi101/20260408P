@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KINETIC_LEDGER | System Status</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "surface-tint": "#7bd0ff",
+                        "on-primary-container": "#008abb",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#7bd0ff",
+                        "on-tertiary-container": "#009365",
+                        "on-secondary-container": "#aeb9d0",
+                        "surface-container-low": "#131b2e",
+                        "surface-container-highest": "#2d3449",
+                        "secondary": "#bcc7de",
+                        "primary-container": "#001a27",
+                        "outline-variant": "#45464d",
+                        "error": "#ffb4ab",
+                        "surface-container": "#171f33",
+                        "surface": "#0b1326",
+                        "surface-dim": "#0b1326",
+                        "on-primary-fixed": "#001e2c",
+                        "on-primary": "#00354a",
+                        "on-background": "#dae2fd",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-primary-fixed-variant": "#004c69",
+                        "inverse-on-surface": "#283044",
+                        "background": "#0b1326",
+                        "tertiary-container": "#001c10",
+                        "outline": "#909097",
+                        "on-tertiary-fixed": "#002113",
+                        "primary-fixed": "#c4e7ff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#222a3d",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-error": "#690005",
+                        "tertiary": "#4edea3",
+                        "inverse-surface": "#dae2fd",
+                        "secondary-fixed": "#d8e3fb",
+                        "surface-container-lowest": "#060e20",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "on-tertiary": "#003824",
+                        "surface-variant": "#2d3449",
+                        "inverse-primary": "#00668a",
+                        "on-secondary": "#263143",
+                        "surface-bright": "#31394d",
+                        "on-surface-variant": "#c6c6cd",
+                        "secondary-container": "#3e495d",
+                        "on-surface": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pulse-indicator {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pulse-indicator::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: currentColor;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(.33); }
+            80%, 100% { opacity: 0; }
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b1326;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #131b2e;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2d3449;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased custom-scrollbar">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full sticky left-0 top-0 pt-4 w-64 h-screen border-r border-slate-800/50 bg-slate-900 against slate-950 floor">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-2">
+<span class="text-sky-400 font-['Space_Grotesk'] font-bold text-xl">QUANT_STUDIO</span>
+</div>
+<div class="text-slate-500 font-['Inter'] font-medium text-[10px] uppercase tracking-[0.2em] mt-1">V2.0.4-STABLE</div>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="px-4 py-2 text-slate-600 font-['Inter'] font-medium text-xs uppercase tracking-widest">Core Engine</div>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="database">database</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Data Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="science">science</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Research Lab</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="history_toggle_off">history_toggle_off</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Backtesting</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="show_chart">show_chart</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Live Trading</span>
+</a>
+</nav>
+<div class="p-4">
+<button class="w-full bg-gradient-to-r from-primary to-on-primary-container text-on-primary-fixed py-2.5 rounded shadow-lg font-['Space_Grotesk'] font-bold text-sm tracking-tight active:scale-95 transition-transform">
+                    New Experiment
+                </button>
+</div>
+<div class="mt-auto border-t border-slate-800/50 pt-4 pb-6">
+<a class="flex items-center gap-3 px-6 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="description">description</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Docs</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_center">help_center</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-y-auto custom-scrollbar bg-surface">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-6 h-14 sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 shadow-2xl shadow-black/50">
+<div class="flex items-center gap-8">
+<h1 class="text-xl font-bold tracking-tighter text-sky-400 font-['Space_Grotesk']">KINETIC_LEDGER</h1>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sky-400 border-b-2 border-sky-400 pb-1 font-['Space_Grotesk'] tracking-tight text-sm" href="#">System Status</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Space_Grotesk'] tracking-tight text-sm" href="#">Network</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Space_Grotesk'] tracking-tight text-sm" href="#">Compute</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-slate-900/50 border border-slate-800/50 rounded-sm py-1 px-3 text-xs w-64 focus:outline-none focus:ring-1 focus:ring-sky-400/30 text-on-surface placeholder:text-slate-600 font-mono" placeholder="Global Cluster Search..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-slate-200 transition-colors hover:bg-slate-800/40 rounded">
+<span class="material-symbols-outlined text-xl" data-icon="notifications_active">notifications_active</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-slate-200 transition-colors hover:bg-slate-800/40 rounded">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full bg-slate-800 border border-slate-700/50 flex items-center justify-center overflow-hidden">
+<img alt="Researcher Profile" class="h-full w-full object-cover" data-alt="close up professional headshot of a technical researcher with glasses in a dimly lit high-tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSFMEgUBBgntEKALe4di2TEizwsBlxM_xDc3vdI12wVOGX66QQ0ONTqXogyJZUfQU_cnjL5LXeYY3TzQcArr5tUTDgF_Lren7oTi8NOoFBv5SpqHlSafGTLqfD7JWtiJj5qEoYCyyITsIgk1iTG1n6vrBEqkNLS8H4RpiOu7hYQA5pEDDBElUX1PNP-5LWhs8Ns_EH4nEXWgK72p7W6p_js4ifryLAdm9xsFjR2LXIXwuWh7uYFkJ7g1Te9EoYb3Vt5T8GcN3e5jg"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Body -->
+<div class="p-6 space-y-6">
+<!-- System Health Summary Header -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-1 border-l-2 border-tertiary">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Overall Uptime</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-headline text-tertiary">99.998%</span>
+<span class="text-[10px] font-mono text-tertiary-fixed-dim">STABLE</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Total Latency</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-headline text-on-surface">14.2<small class="text-sm">ms</small></span>
+<span class="text-[10px] font-mono text-tertiary-fixed-dim">OPTIMAL</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Active Workers</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-headline text-on-surface">1,024</span>
+<span class="text-[10px] font-mono text-primary">SCALING</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-1 border-l-2 border-error">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Incidents (24h)</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-headline text-error">2</span>
+<span class="text-[10px] font-mono text-error/70">RESOLVED</span>
+</div>
+</div>
+</div>
+<!-- Core Engines Asymmetric Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Engine Status Grid -->
+<div class="lg:col-span-8 space-y-6">
+<h2 class="text-sm font-bold tracking-widest uppercase text-slate-500 font-headline">Core Infrastructure Engines</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Ingestion Engine -->
+<div class="bg-surface-container-high rounded-xl p-5 border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-900 rounded flex items-center justify-center text-sky-400">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+</div>
+<div>
+<h3 class="text-sm font-bold font-headline tracking-tight">INGESTION_ENGINE</h3>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary pulse-indicator"></div>
+<span class="text-[10px] text-tertiary-fixed-dim font-mono uppercase">Operational</span>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-mono text-slate-500">ID: IE-04-TX</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">CPU UTILIZATION</span>
+<span class="text-tertiary">42.8%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[42.8%]"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">MEMORY (RAM)</span>
+<span class="text-on-surface">12.4 / 32 GB</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[38%]"></div>
+</div>
+<div class="pt-4 grid grid-cols-2 gap-4 border-t border-outline-variant/10">
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Throughput</div>
+<div class="text-xs font-mono font-bold">1.2 GB/s</div>
+</div>
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">IOPS</div>
+<div class="text-xs font-mono font-bold">45.2K</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Execution Engine -->
+<div class="bg-surface-container-high rounded-xl p-5 border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-900 rounded flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</div>
+<div>
+<h3 class="text-sm font-bold font-headline tracking-tight">EXECUTION_ENGINE</h3>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary pulse-indicator"></div>
+<span class="text-[10px] text-tertiary-fixed-dim font-mono uppercase">Operational</span>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-mono text-slate-500">ID: EX-88-PRO</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">CPU UTILIZATION</span>
+<span class="text-error">88.2%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-error w-[88.2%]"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">MEMORY (RAM)</span>
+<span class="text-on-surface">24.1 / 32 GB</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[75%]"></div>
+</div>
+<div class="pt-4 grid grid-cols-2 gap-4 border-t border-outline-variant/10">
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Order Rate</div>
+<div class="text-xs font-mono font-bold">840 req/s</div>
+</div>
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Latency p99</div>
+<div class="text-xs font-mono font-bold">1.2ms</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Research Engine -->
+<div class="bg-surface-container-high rounded-xl p-5 border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-900 rounded flex items-center justify-center text-amber-400">
+<span class="material-symbols-outlined" data-icon="functions">functions</span>
+</div>
+<div>
+<h3 class="text-sm font-bold font-headline tracking-tight">RESEARCH_LAB_V2</h3>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary pulse-indicator"></div>
+<span class="text-[10px] text-tertiary-fixed-dim font-mono uppercase">Operational</span>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-mono text-slate-500">ID: RL-BETA-01</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">CPU UTILIZATION</span>
+<span class="text-on-surface">12.5%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[12.5%]"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">VRAM (GPU)</span>
+<span class="text-on-surface">3.4 / 16 GB</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[21%]"></div>
+</div>
+<div class="pt-4 grid grid-cols-2 gap-4 border-t border-outline-variant/10">
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Active Tasks</div>
+<div class="text-xs font-mono font-bold">12 / 64</div>
+</div>
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Uptime</div>
+<div class="text-xs font-mono font-bold">142d 12h</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Network Cluster -->
+<div class="bg-surface-container-high rounded-xl p-5 border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-900 rounded flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+</div>
+<div>
+<h3 class="text-sm font-bold font-headline tracking-tight">GLOBAL_CLUSTER_MESH</h3>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-amber-500 pulse-indicator"></div>
+<span class="text-[10px] text-amber-500 font-mono uppercase">Syncing</span>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-mono text-slate-500">ID: MESH-NYC-01</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">PACKET FLOW</span>
+<span class="text-on-surface">92.4 TB/d</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-mono">
+<span class="text-on-surface-variant">ERROR RATE</span>
+<span class="text-on-surface">0.001%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[5%]"></div>
+</div>
+<div class="pt-4 grid grid-cols-2 gap-4 border-t border-outline-variant/10">
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Nodes</div>
+<div class="text-xs font-mono font-bold">254 Online</div>
+</div>
+<div>
+<div class="text-[9px] text-slate-500 uppercase tracking-tighter">Propagation</div>
+<div class="text-xs font-mono font-bold">0.4ms</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Incident Log Blade -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<h2 class="text-sm font-bold tracking-widest uppercase text-slate-500 font-headline">Cluster Event Log</h2>
+<div class="flex-1 bg-surface-container-low rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant/20 bg-slate-900/50 flex justify-between items-center">
+<span class="text-[10px] font-bold font-headline tracking-widest text-on-surface">REAL-TIME TELEMETRY</span>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary pulse-indicator"></div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-0">
+<!-- Log Item -->
+<div class="p-3 border-b border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-mono text-slate-500">14:22:04.128</span>
+<span class="text-[9px] bg-tertiary-container text-on-tertiary-container px-1 rounded uppercase font-bold">Info</span>
+</div>
+<p class="text-[11px] font-mono text-on-surface">Data persistence layer sync completed. Checksum: <span class="text-sky-400">0x8F2A...</span></p>
+</div>
+<!-- Log Item -->
+<div class="p-3 border-b border-outline-variant/10 hover:bg-surface-container-high transition-colors bg-error-container/10">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-mono text-slate-500">14:18:55.902</span>
+<span class="text-[9px] bg-error-container text-on-error-container px-1 rounded uppercase font-bold">Critical</span>
+</div>
+<p class="text-[11px] font-mono text-error">Memory pressure detected in Execution Cluster Node 4. Initiating auto-scaling.</p>
+</div>
+<!-- Log Item -->
+<div class="p-3 border-b border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-mono text-slate-500">14:15:32.441</span>
+<span class="text-[9px] bg-slate-800 text-slate-400 px-1 rounded uppercase font-bold">Network</span>
+</div>
+<p class="text-[11px] font-mono text-on-surface">Packet loss detected on sub-mesh C-9. Rerouting via Node A-12.</p>
+</div>
+<!-- Log Item -->
+<div class="p-3 border-b border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-mono text-slate-500">14:12:11.002</span>
+<span class="text-[9px] bg-tertiary-container text-on-tertiary-container px-1 rounded uppercase font-bold">Info</span>
+</div>
+<p class="text-[11px] font-mono text-on-surface">Snapshot 44-B created. Saved to hot storage.</p>
+</div>
+<!-- Log Item -->
+<div class="p-3 border-b border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-mono text-slate-500">14:05:44.298</span>
+<span class="text-[9px] bg-amber-900/50 text-amber-400 px-1 rounded uppercase font-bold">Warning</span>
+</div>
+<p class="text-[11px] font-mono text-on-surface">Research Lab experiment 'Alpha-Sigma' exceeded target VRAM limit. Throttling.</p>
+</div>
+<!-- Log Item -->
+<div class="p-3 border-b border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-mono text-slate-500">13:58:21.115</span>
+<span class="text-[9px] bg-tertiary-container text-on-tertiary-container px-1 rounded uppercase font-bold">Info</span>
+</div>
+<p class="text-[11px] font-mono text-on-surface">Morning session cleanup routine triggered successfully.</p>
+</div>
+</div>
+<div class="p-2 bg-slate-900 border-t border-outline-variant/10 flex justify-center">
+<button class="text-[10px] font-headline font-bold text-slate-500 hover:text-sky-400 uppercase tracking-widest transition-colors">Download System Dump</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Stats Density Area -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low rounded-lg p-5 border border-outline-variant/5">
+<h4 class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-4">Storage IOPS Matrix</h4>
+<div class="space-y-2">
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Read Latency</span>
+<span class="text-tertiary">0.04ms</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Write Latency</span>
+<span class="text-tertiary">0.12ms</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Queue Depth</span>
+<span class="text-on-surface">2</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-5 border border-outline-variant/5">
+<h4 class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-4">Bandwidth Consumption</h4>
+<div class="flex items-center gap-4">
+<div class="flex-1">
+<div class="text-2xl font-headline font-bold text-primary">4.2 <small class="text-xs">Gbps</small></div>
+<div class="text-[10px] font-mono text-slate-500">Egress Average</div>
+</div>
+<div class="w-24 h-12 flex items-end gap-1">
+<div class="flex-1 bg-primary/20 h-4"></div>
+<div class="flex-1 bg-primary/20 h-6"></div>
+<div class="flex-1 bg-primary/40 h-10"></div>
+<div class="flex-1 bg-primary/60 h-8"></div>
+<div class="flex-1 bg-primary h-12"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-5 border border-outline-variant/5">
+<h4 class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-4">Cluster Distribution</h4>
+<div class="flex gap-2">
+<div class="flex-1 bg-sky-400/10 border border-sky-400/30 rounded p-2 text-center">
+<div class="text-xs font-bold font-mono text-sky-400">NYC-A</div>
+<div class="text-[9px] text-slate-500">Primary</div>
+</div>
+<div class="flex-1 bg-slate-800 border border-slate-700 rounded p-2 text-center">
+<div class="text-xs font-bold font-mono text-slate-400">LDN-B</div>
+<div class="text-[9px] text-slate-500">Standby</div>
+</div>
+<div class="flex-1 bg-slate-800 border border-slate-700 rounded p-2 text-center">
+<div class="text-xs font-bold font-mono text-slate-400">TKO-C</div>
+<div class="text-[9px] text-slate-500">Replica</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation (Visible only on small screens) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-slate-900 border-t border-slate-800 flex justify-around items-center px-4 z-50">
+<button class="flex flex-col items-center gap-1 text-sky-400">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] uppercase font-bold font-headline">Status</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="text-[10px] uppercase font-bold font-headline">Data</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+<span class="text-[10px] uppercase font-bold font-headline">Lab</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] uppercase font-bold font-headline">Config</span>
+</button>
+</div>
+</body></html>

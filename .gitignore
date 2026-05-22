@@ -1,0 +1,56 @@
+# Development artifacts
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+bin/
+lib/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Build artifacts
+build/
+target/
+dist/
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Project specifics
+data/
+db/*.db
+db/*.sqlite
+.env
+.env.local
+.gemini/
+.antigravity/
+
+# Model weights (large files)
+data/models/*.json
+data/models/*.txt
+data/models/*.joblib

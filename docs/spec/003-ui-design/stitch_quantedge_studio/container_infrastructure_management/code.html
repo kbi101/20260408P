@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuantEdge Studio - Infrastructure</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#bcc7de",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-lowest": "#060e20",
+                        "on-tertiary-fixed": "#002113",
+                        "on-secondary-fixed": "#111c2d",
+                        "outline": "#909097",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001e2c",
+                        "surface-container": "#171f33",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-primary-fixed-variant": "#004c69",
+                        "surface-bright": "#31394d",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#45464d",
+                        "primary-fixed": "#c4e7ff",
+                        "surface-dim": "#0b1326",
+                        "on-background": "#dae2fd",
+                        "on-tertiary-container": "#009365",
+                        "on-surface": "#dae2fd",
+                        "surface-tint": "#7bd0ff",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "on-surface-variant": "#c6c6cd",
+                        "primary-container": "#001a27",
+                        "on-tertiary": "#003824",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-variant": "#2d3449",
+                        "tertiary": "#4edea3",
+                        "primary": "#7bd0ff",
+                        "surface-container-high": "#222a3d",
+                        "on-primary-container": "#008abb",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary": "#00354a",
+                        "secondary-fixed": "#d8e3fb",
+                        "on-secondary-container": "#aeb9d0",
+                        "secondary-container": "#3e495d",
+                        "on-secondary": "#263143",
+                        "tertiary-container": "#001c10",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "inverse-on-surface": "#283044",
+                        "surface": "#0b1326",
+                        "surface-container-low": "#131b2e",
+                        "inverse-primary": "#00668a",
+                        "background": "#0b1326",
+                        "inverse-surface": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            font-family: 'Inter', sans-serif;
+        }
+        .mono-data {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .pulse-ripple {
+            position: relative;
+        }
+        .pulse-ripple::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: 50%;
+            animation: ripple 2s infinite;
+            opacity: 0.4;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-6 h-14 w-full sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl w-full border-b border-slate-800/50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-sky-400 font-['Space_Grotesk']">QuantEdge Studio</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 pb-1 hover:text-sky-300 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Market</a>
+<a class="text-slate-400 pb-1 hover:text-sky-300 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Backtest</a>
+<a class="text-sky-400 border-b-2 border-sky-400 pb-1 hover:text-sky-300 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Compute</a>
+<a class="text-slate-400 pb-1 hover:text-sky-300 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Deploy</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-on-primary-fixed px-4 py-1.5 rounded-lg text-sm font-bold hover:opacity-90 transition-all font-['Space_Grotesk']">Execute</button>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-white" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-white" data-icon="settings">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-700">
+<img alt="User profile" data-alt="geometric abstract shape in blue and slate representing a user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACOH8I2i6gzetrNu7JcpjFToDnBtiHPkiNWM8Bena4q3uqOqxYBmZufYfc_h76lynKkRTeU2AVZv351L22wBeLdgf35vQnD1vMpbked3ldNYDaxVXGfGOqDl_3xzwjoI1SsTTq8vODG3RnR91IZhPjKD7yIdvJ5vijugylBLG9PY3C4Be9RQgi_KZtR6oXh5DnU6CKtZYf6zGqmr8YAWigNQ6gwZocO5JZzCD2N6oaWU1h94l2dlYz2HNa8v4_Fd3jy1-Oz6FQbsI"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-0">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-full py-4 fixed left-0 top-14 h-screen w-64 border-r border-slate-800/50 bg-slate-950 font-['Inter'] text-sm font-medium">
+<div class="px-4 mb-6">
+<div class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-lg">
+<div class="w-2 h-2 rounded-full bg-tertiary pulse-ripple"></div>
+<div>
+<div class="text-sky-400 font-bold block">Core Systems</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">V-4.0.2 Stable</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/80 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="memory">memory</span>
+<span>Infrastructure</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 bg-sky-500/10 text-sky-400 border-r-2 border-sky-400 hover:bg-slate-900/80 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dock">dock</span>
+<span>Containers</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/80 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span>Orchestration</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/80 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span>Clusters</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/80 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span>Logs</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/80 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span>Telemetry</span>
+</div>
+</nav>
+<div class="mt-auto px-4 space-y-4">
+<button class="w-full bg-slate-900 border border-slate-800 text-sky-400 py-2 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    New Node
+                </button>
+<div class="pt-4 border-t border-slate-800">
+<div class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-slate-300 cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span>
+<span>Help</span>
+</div>
+<div class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-error cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+<span>Sign Out</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-64 p-8 bg-surface-dim">
+<!-- Infrastructure Health HUD -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-tertiary shadow-sm">
+<div class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">Orchestration Health</div>
+<div class="flex items-end justify-between">
+<div class="text-3xl font-bold font-headline text-on-surface">99.98%</div>
+<div class="text-tertiary flex items-center gap-1 text-sm font-mono">
+<span class="material-symbols-outlined text-xs" data-icon="arrow_upward">arrow_upward</span>
+                            0.02%
+                        </div>
+</div>
+<div class="mt-4 h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[99.98%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary shadow-sm">
+<div class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">Database Connectivity</div>
+<div class="flex items-end justify-between">
+<div class="text-3xl font-bold font-headline text-on-surface">8.4ms</div>
+<div class="text-primary flex items-center gap-1 text-sm font-mono">
+<span class="material-symbols-outlined text-xs" data-icon="speed">speed</span>
+                            Stable
+                        </div>
+</div>
+<div class="mt-4 h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-secondary shadow-sm">
+<div class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">Total Resource Usage</div>
+<div class="flex items-end justify-between">
+<div class="text-3xl font-bold font-headline text-on-surface">64.2%</div>
+<div class="text-secondary flex items-center gap-1 text-sm font-mono">
+                            32/48 Cores
+                        </div>
+</div>
+<div class="mt-4 h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[64.2%]"></div>
+</div>
+</div>
+</div>
+<!-- Header Section -->
+<div class="flex justify-between items-center mb-6">
+<div>
+<h1 class="text-2xl font-bold font-headline text-on-surface tracking-tight">Container Management</h1>
+<p class="text-on-surface-variant text-sm">System-level abstraction of high-frequency trading services.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-highest text-on-surface px-4 py-2 rounded font-medium flex items-center gap-2 hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+                        Refresh State
+                    </button>
+<button class="bg-primary text-on-primary-fixed px-4 py-2 rounded font-bold flex items-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="rocket_launch">rocket_launch</span>
+                        Deploy Cluster
+                    </button>
+</div>
+</div>
+<!-- Container Management Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+<!-- QuestDB Card -->
+<div class="bg-surface-container-low rounded-lg border border-outline-variant/20 overflow-hidden hover:bg-surface-container transition-all">
+<div class="p-5 flex items-start justify-between">
+<div class="flex gap-4">
+<div class="p-3 bg-tertiary-container rounded border border-tertiary/20">
+<span class="material-symbols-outlined text-tertiary" data-icon="database">database</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface font-headline">QuestDB Container</h3>
+<p class="text-xs text-on-surface-variant mt-1 max-w-xs leading-relaxed">High-performance time-series database for market ticks.</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase font-bold tracking-widest text-tertiary bg-tertiary-container px-2 py-0.5 rounded flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full pulse-ripple"></span>
+                                Running (Healthy)
+                            </span>
+<span class="text-[10px] font-mono text-on-surface-variant mt-2">Port 9000 (REST/PG)</span>
+</div>
+</div>
+<div class="px-5 py-4 border-t border-outline-variant/10 grid grid-cols-2 gap-6">
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">CPU Usage</span>
+<span class="text-[10px] font-mono text-tertiary">14.2%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-tertiary w-[14.2%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">RAM Usage</span>
+<span class="text-[10px] font-mono text-secondary">4.2GB / 16GB</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-secondary w-[26%]"></div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest/50 flex gap-2 justify-end">
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Restart">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Logs">
+<span class="material-symbols-outlined text-sm" data-icon="receipt_long">receipt_long</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Shell">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+</button>
+<div class="w-px h-5 bg-outline-variant/20 mx-1"></div>
+<button class="text-[11px] font-bold text-sky-400 px-3 hover:underline">View Config</button>
+</div>
+</div>
+<!-- PostgreSQL Card -->
+<div class="bg-surface-container-low rounded-lg border border-outline-variant/20 overflow-hidden hover:bg-surface-container transition-all">
+<div class="p-5 flex items-start justify-between">
+<div class="flex gap-4">
+<div class="p-3 bg-primary-container rounded border border-primary/20">
+<span class="material-symbols-outlined text-primary" data-icon="storage">storage</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface font-headline">PostgreSQL Container</h3>
+<p class="text-xs text-on-surface-variant mt-1 max-w-xs leading-relaxed">Relational store for strategy metadata and portfolio history.</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary-container px-2 py-0.5 rounded flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                Running (Master)
+                            </span>
+<span class="text-[10px] font-mono text-on-surface-variant mt-2">Port 5432</span>
+</div>
+</div>
+<div class="px-5 py-4 border-t border-outline-variant/10 grid grid-cols-2 gap-6">
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">CPU Usage</span>
+<span class="text-[10px] font-mono text-tertiary">2.8%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-tertiary w-[2.8%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">RAM Usage</span>
+<span class="text-[10px] font-mono text-secondary">1.1GB / 8GB</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-secondary w-[14%]"></div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest/50 flex gap-2 justify-end">
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Restart">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Logs">
+<span class="material-symbols-outlined text-sm" data-icon="receipt_long">receipt_long</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Shell">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+</button>
+<div class="w-px h-5 bg-outline-variant/20 mx-1"></div>
+<button class="text-[11px] font-bold text-sky-400 px-3 hover:underline">View Config</button>
+</div>
+</div>
+<!-- Docker Host Card -->
+<div class="bg-surface-container-low rounded-lg border border-outline-variant/20 overflow-hidden hover:bg-surface-container transition-all">
+<div class="p-5 flex items-start justify-between">
+<div class="flex gap-4">
+<div class="p-3 bg-surface-container-highest rounded border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary" data-icon="developer_board">developer_board</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface font-headline">Docker Host</h3>
+<p class="text-xs text-on-surface-variant mt-1 max-w-xs leading-relaxed">Local container runtime for development and microservices.</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant bg-surface-container-highest px-2 py-0.5 rounded flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+                                Active - 12 Running
+                            </span>
+<span class="text-[10px] font-mono text-on-surface-variant mt-2">engine-v24.0.7</span>
+</div>
+</div>
+<div class="px-5 py-4 border-t border-outline-variant/10 grid grid-cols-2 gap-6">
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">CPU Load</span>
+<span class="text-[10px] font-mono text-on-error">82.1%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-error w-[82.1%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">Disk I/O</span>
+<span class="text-[10px] font-mono text-secondary">312 MB/s</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-secondary w-[45%]"></div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest/50 flex gap-2 justify-end">
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Restart">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Logs">
+<span class="material-symbols-outlined text-sm" data-icon="receipt_long">receipt_long</span>
+</button>
+<div class="w-px h-5 bg-outline-variant/20 mx-1"></div>
+<button class="text-[11px] font-bold text-sky-400 px-3 hover:underline">View Config</button>
+</div>
+</div>
+<!-- Kubernetes Card -->
+<div class="bg-surface-container-low rounded-lg border border-outline-variant/20 overflow-hidden hover:bg-surface-container transition-all">
+<div class="p-5 flex items-start justify-between">
+<div class="flex gap-4">
+<div class="p-3 bg-secondary-container rounded border border-secondary/20">
+<span class="material-symbols-outlined text-secondary" data-icon="grid_view">grid_view</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface font-headline">Kubernetes (K8S) Cluster</h3>
+<p class="text-xs text-on-surface-variant mt-1 max-w-xs leading-relaxed">Production-grade orchestration for distributed backtesting nodes.</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase font-bold tracking-widest text-tertiary bg-tertiary-container px-2 py-0.5 rounded flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full pulse-ripple"></span>
+                                Active - 4 Nodes Online
+                            </span>
+<span class="text-[10px] font-mono text-on-surface-variant mt-2">kubectl-ctx: prod-cluster</span>
+</div>
+</div>
+<div class="px-5 py-4 border-t border-outline-variant/10 grid grid-cols-2 gap-6">
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">Node Affinity</span>
+<span class="text-[10px] font-mono text-tertiary">Optimized</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-tertiary w-[100%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">Cluster Traffic</span>
+<span class="text-[10px] font-mono text-secondary">42.1 Gbps</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-secondary w-[58%]"></div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest/50 flex gap-2 justify-end">
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Dashboard">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard_customize">dashboard_customize</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Scale">
+<span class="material-symbols-outlined text-sm" data-icon="open_with">open_with</span>
+</button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-on-surface-variant transition-colors" title="Shell">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+</button>
+<div class="w-px h-5 bg-outline-variant/20 mx-1"></div>
+<button class="text-[11px] font-bold text-sky-400 px-3 hover:underline">View Config</button>
+</div>
+</div>
+</div>
+<!-- Logs/Events Feed -->
+<div class="mt-8 bg-surface-container-lowest border border-outline-variant/10 rounded overflow-hidden">
+<div class="bg-surface-container-high px-4 py-2 border-b border-outline-variant/10 flex justify-between items-center">
+<span class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Infrastructure Lifecycle Events</span>
+<span class="text-[10px] font-mono text-tertiary flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full pulse-ripple"></span>
+                        Real-time Monitoring Active
+                    </span>
+</div>
+<div class="font-mono text-xs p-4 space-y-2 max-h-48 overflow-y-auto">
+<div class="flex gap-4 hover:bg-surface-container/30 transition-colors py-1">
+<span class="text-slate-600">[2023-11-24 14:22:01]</span>
+<span class="text-tertiary">INFO</span>
+<span class="text-on-surface-variant">Container <span class="text-on-surface font-bold">QuestDB</span> restarted successfully. All services resumed.</span>
+</div>
+<div class="flex gap-4 hover:bg-surface-container/30 transition-colors py-1">
+<span class="text-slate-600">[2023-11-24 14:15:44]</span>
+<span class="text-primary">INFO</span>
+<span class="text-on-surface-variant">K8S Cluster scaling event: <span class="text-on-surface font-bold">Node 03</span> scaled to 16 vCPUs.</span>
+</div>
+<div class="flex gap-4 hover:bg-surface-container/30 transition-colors py-1">
+<span class="text-slate-600">[2023-11-24 13:58:12]</span>
+<span class="text-tertiary">HEALTH</span>
+<span class="text-on-surface-variant">Database heartbeat check for <span class="text-on-surface font-bold">PostgreSQL</span>: 0.2ms latency.</span>
+</div>
+<div class="flex gap-4 hover:bg-surface-container/30 transition-colors py-1">
+<span class="text-slate-600">[2023-11-24 13:42:05]</span>
+<span class="text-error">WARN</span>
+<span class="text-on-surface-variant">Docker Host memory threshold reached (85%). Consider vertical scaling.</span>
+</div>
+<div class="flex gap-4 hover:bg-surface-container/30 transition-colors py-1">
+<span class="text-slate-600">[2023-11-24 13:30:00]</span>
+<span class="text-slate-400">DEBUG</span>
+<span class="text-on-surface-variant">Telemetry sync completed for 12 edge nodes.</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

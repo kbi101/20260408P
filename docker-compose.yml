@@ -1,0 +1,153 @@
+services:
+  # --- Core API & Service Layer ---
+  api:
+    build:
+      context: .
+      dockerfile: devops/docker/api.Dockerfile
+    restart: always
+    ports:
+      - "3101:8000" # Standardized API
+    environment:
+      - DB_URL=${DB_URL:-host=host.docker.internal port=5432 dbname=crystal_db user=postgres password=REPLACED_FOR_GITHUB options='-c search_path=quant'}
+      - REDIS_URL=${REDIS_URL:-redis://host.docker.internal:6379}
+      - TEMPORAL_HOST=temporal:7233
+      - QUESTDB_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./apps/api:/app/apps/api
+      - ./libs/shared:/app/libs/shared
+      - ./data:/app/data
+      - ./data/fundamentals:/app/data/fundamentals
+      - ./db:/app/db
+      - ./docs:/app/docs
+    command: ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--timeout-keep-alive", "30"]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  infra:
+    build:
+      context: .
+      dockerfile: devops/docker/api.Dockerfile
+    restart: always
+    command: ["uvicorn", "services.infra.main:app", "--host", "0.0.0.0", "--port", "8002", "--workers", "2", "--timeout-keep-alive", "30"]
+    ports:
+      - "3102:8002" # Standardized Infra Registry
+    environment:
+      - DB_URL=${DB_URL:-host=host.docker.internal port=5432 dbname=crystal_db user=postgres password=REPLACED_FOR_GITHUB options='-c search_path=quant'}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: devops/docker/frontend.Dockerfile
+      args:
+        - VITE_API_BASE_URL=http://${HOST_IP:-localhost}:3101
+        - VITE_INFRA_BASE_URL=http://${HOST_IP:-localhost}:3102
+    ports:
+      - "3100:80"
+    environment:
+      - VITE_API_BASE_URL=http://${HOST_IP:-localhost}:3101
+      - VITE_INFRA_BASE_URL=http://${HOST_IP:-localhost}:3102
+    depends_on:
+      - api
+      - infra
+
+  # --- Orchestration Layer (Pure Server Implementation) ---
+  temporal:
+    image: temporalio/auto-setup:1.24.3
+    ports:
+      - "7233:7233"
+    environment:
+      - DB=postgres12
+      - DBNAME=crystal_db
+      - DB_PORT=5432
+      - POSTGRES_SEEDS=host.docker.internal
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PWD=${DB_PASSWORD:-REPLACED_FOR_GITHUB}
+      - VISIBILITY_DBNAME=crystal_db
+      - VISIBILITY_DB_PORT=5432
+      - VISIBILITY_POSTGRES_SEEDS=host.docker.internal
+      - VISIBILITY_POSTGRES_USER=${DB_USER:-postgres}
+      - VISIBILITY_POSTGRES_PWD=${DB_PASSWORD:-REPLACED_FOR_GITHUB}
+      - VISIBILITY_DB=postgres12
+      - SERVICES=history,matching,worker,frontend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  temporal-ui:
+    image: temporalio/ui:latest
+    ports:
+      - "3104:8080"
+    environment:
+      - TEMPORAL_GRPC_ENDPOINT=temporal:7233
+      - TEMPORAL_ADDRESS=temporal:7233
+    depends_on:
+      - temporal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  worker:
+    build:
+      context: .
+      dockerfile: devops/docker/worker.Dockerfile
+    restart: always
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TEMPORAL_HOST=temporal:7233
+      - REDIS_URL=${REDIS_URL:-redis://host.docker.internal:6379}
+      - DB_URL=${DB_URL:-host=host.docker.internal port=5432 dbname=crystal_db user=postgres password=REPLACED_FOR_GITHUB options='-c search_path=quant'}
+      - QUESTDB_HOST=host.docker.internal
+      - QUESTDB_USER=${QUESTDB_USER:-admin}
+      - QUESTDB_PASSWORD=${QUESTDB_PASSWORD:-quest}
+    depends_on:
+      - temporal
+    volumes:
+      - ./data:/app/data
+      - ./data/fundamentals:/app/data/fundamentals
+      - ./libs/shared:/app/libs/shared
+      - ./scripts:/app/scripts
+      - ./services/worker:/app/services/worker
+      - ./db:/app/db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: quantedge-kafka
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://host.docker.internal:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  kafka_data:
+    driver: local
+

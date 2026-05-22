@@ -1,0 +1,50 @@
+# ==========================================
+# ANTIGRAVITY 2.0 TOKEN OPTIMIZATION PROFILE
+# For Spring Boot & Data Engineering Projects
+# ==========================================
+
+# --- Local Data Lakes & Storage (Massive Token Hogs) ---
+*.parquet
+*.csv
+*.tsv
+*.jsonl
+*.db
+*.sqlite
+# Block DuckDB lock and write-ahead log files
+*.duckdb*
+.duckdb/
+
+# --- Build & Compiled Binaries (Never let the AI read bytecode) ---
+target/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+
+# --- Node/UI Dependencies (If using Angular/React frontends) ---
+node_modules/
+.npm/
+dist/
+.angular/
+
+# --- Docker & Local Environment Context ---
+.docker/
+docker-compose.override.yml
+# Exclude raw local log files from the agent loop
+*.log
+logs/
+
+# --- IDE & System Metadata ---
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+
+# --- Version Control ---
+.git/
+.gitignore

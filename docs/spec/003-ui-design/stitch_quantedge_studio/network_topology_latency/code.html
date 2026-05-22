@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#111c2d",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "surface-tint": "#7bd0ff",
+                    "on-primary-container": "#008abb",
+                    "on-error-container": "#ffdad6",
+                    "primary": "#7bd0ff",
+                    "on-tertiary-container": "#009365",
+                    "on-secondary-container": "#aeb9d0",
+                    "surface-container-low": "#131b2e",
+                    "surface-container-highest": "#2d3449",
+                    "secondary": "#bcc7de",
+                    "primary-container": "#001a27",
+                    "outline-variant": "#45464d",
+                    "error": "#ffb4ab",
+                    "surface-container": "#171f33",
+                    "surface": "#0b1326",
+                    "surface-dim": "#0b1326",
+                    "on-primary-fixed": "#001e2c",
+                    "on-primary": "#00354a",
+                    "on-background": "#dae2fd",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "on-primary-fixed-variant": "#004c69",
+                    "inverse-on-surface": "#283044",
+                    "background": "#0b1326",
+                    "tertiary-container": "#001c10",
+                    "outline": "#909097",
+                    "on-tertiary-fixed": "#002113",
+                    "primary-fixed": "#c4e7ff",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#222a3d",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-error": "#690005",
+                    "tertiary": "#4edea3",
+                    "inverse-surface": "#dae2fd",
+                    "secondary-fixed": "#d8e3fb",
+                    "surface-container-lowest": "#060e20",
+                    "primary-fixed-dim": "#7bd0ff",
+                    "on-tertiary": "#003824",
+                    "surface-variant": "#2d3449",
+                    "inverse-primary": "#00668a",
+                    "on-secondary": "#263143",
+                    "surface-bright": "#31394d",
+                    "on-surface-variant": "#c6c6cd",
+                    "secondary-container": "#3e495d",
+                    "on-surface": "#dae2fd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .pulse-dot {
+            position: relative;
+        }
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: inherit;
+            border-radius: 50%;
+            animation: ripple 2s infinite;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(123, 208, 255, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 selection:text-primary">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-64 h-screen border-r border-slate-800/50 flex flex-col h-full sticky left-0 top-0 pt-4 bg-slate-900">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-sky-400 font-['Space_Grotesk'] font-bold text-xl tracking-tighter">QUANT_STUDIO</span>
+</div>
+<div class="text-slate-500 font-['Inter'] font-medium text-[10px] uppercase tracking-[0.2em]">V2.0.4-STABLE</div>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all font-['Inter'] font-medium text-xs uppercase tracking-widest active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="database">database</span>
+<span>Data Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all font-['Inter'] font-medium text-xs uppercase tracking-widest active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="science">science</span>
+<span>Research Lab</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all font-['Inter'] font-medium text-xs uppercase tracking-widest active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="history_toggle_off">history_toggle_off</span>
+<span>Backtesting</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-slate-800 text-sky-400 border-l-4 border-sky-500 font-['Inter'] font-medium text-xs uppercase tracking-widest active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="show_chart">show_chart</span>
+<span>Live Trading</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800/50">
+<button class="w-full py-2.5 bg-gradient-to-r from-primary to-on-primary-container text-on-primary-fixed font-headline font-bold text-sm rounded transition-all hover:brightness-110 active:scale-[0.98]">
+                    New Experiment
+                </button>
+</div>
+<div class="px-3 pb-6 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all font-['Inter'] font-medium text-xs uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="description">description</span>
+<span>Docs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-all font-['Inter'] font-medium text-xs uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_center">help_center</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-6 h-14 sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 shadow-2xl shadow-black/50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-sky-400 font-['Space_Grotesk']">KINETIC_LEDGER</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-['Space_Grotesk'] tracking-tight text-slate-400 hover:text-slate-200 transition-colors text-sm" href="#">System Status</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sky-400 border-b-2 border-sky-400 pb-1 text-sm" href="#">Network</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-slate-400 hover:text-slate-200 transition-colors text-sm" href="#">Compute</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-slate-900 rounded-lg border border-slate-800/50">
+<span class="material-symbols-outlined text-sky-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs text-on-surface-variant font-mono w-40" placeholder="Search nodes..." type="text"/>
+</div>
+<button class="p-2 text-slate-400 hover:text-slate-200 transition-colors hover:bg-slate-800/40 rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-slate-200 transition-colors hover:bg-slate-800/40 rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-sky-400/30">
+<img alt="Researcher Profile" class="w-full h-full object-cover" data-alt="Researcher Profile portrait of a high-tech quantitative finance professional in a dark studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtk9e9rxrF2vUlj2hLD5OHrLuWfGq4IjOBSfnSQ6eTQM_caJCWe6eNdP54TYC7nw4H2two_7AwWecF0ENLi_gT0Zsz9fpQlv7TrJoxYFcRzTDA53ItJ7YOMXW5JdVfdABHnI_Upjs5Sz0LIKU4yF2ODooWdFyhw85PNxUec0E6ooZthnPGBdsPL7hUv5NN6z45bgb-EbDwdgP__h7L-w3heeTuIYo9ff0ZB44ViFiKZ0-HdHLjzd8Ml7w6CrchVSE_pjRXJP7zmL8"/>
+</div>
+</div>
+</header>
+<!-- Network Dashboard Body -->
+<div class="flex-1 overflow-hidden p-6 flex flex-col gap-6">
+<!-- Layout Header -->
+<div class="flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="text-3xl font-headline font-bold text-on-surface tracking-tight uppercase">Network Topology</h1>
+<div class="px-2 py-0.5 rounded bg-tertiary/10 border border-tertiary/20 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary pulse-dot"></span>
+<span class="text-[10px] font-mono text-tertiary font-bold">LIVE_TX_STREAM</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm font-body">Global data center interconnectivity and exchange latency monitor.</p>
+</div>
+<div class="flex gap-3">
+<div class="bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant/20 flex flex-col items-end">
+<span class="text-[10px] text-on-surface-variant font-mono uppercase tracking-widest">Avg Network Latency</span>
+<span class="text-xl font-mono text-primary font-bold">14.28ms</span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant/20 flex flex-col items-end">
+<span class="text-[10px] text-on-surface-variant font-mono uppercase tracking-widest">Global Packet Loss</span>
+<span class="text-xl font-mono text-tertiary font-bold">0.002%</span>
+</div>
+</div>
+</div>
+<!-- Main Content Stage: Bento Grid -->
+<div class="flex-1 grid grid-cols-12 grid-rows-6 gap-4 min-h-0">
+<!-- Topology Visualizer (The Map) -->
+<div class="col-span-8 row-span-6 bg-surface-container-low rounded-xl relative overflow-hidden group">
+<!-- Background Mesh/Grid -->
+<div class="absolute inset-0 opacity-20 pointer-events-none scanline"></div>
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, #7bd0ff 1px, transparent 0); background-size: 40px 40px;"></div>
+<!-- Map Image Placeholder -->
+<div class="absolute inset-0 flex items-center justify-center p-8">
+<div class="relative w-full h-full border border-primary/10 rounded-lg overflow-hidden bg-surface-container-lowest shadow-inner">
+<img class="w-full h-full object-cover opacity-60 mix-blend-screen grayscale contrast-125" data-alt="Abstract world map with glowing blue network lines and data nodes connecting major financial hubs on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA14YrAwRakzBdddzjr_udyvLrGvW7V9q1EFU9_1F-NnERvmBSX-fz83j4n-_J5D5BX0UOTR1znxHv53bsXxk5-_yVrGt2_bdf9XFJ1ajka_xvqxBcVjYPl5TLCVnPh_qsWniPvb7QS8uiR-RZH4PPNWJtTPVV02IlZkj-gTHHFB1mxUVw9TuMXtwdoLnFxqwF2IghL1EwPAbCkiF-l4PQ7_OtvX-bZg9l9m9c6-vaxs2BajT1AXX5xBuSeeYK2qn0juc51MTG7c9M"/>
+<!-- Interactive Node Markers (Absolute Positioned) -->
+<!-- New York -->
+<div class="absolute top-[35%] left-[25%] group/node cursor-pointer">
+<div class="w-3 h-3 bg-primary rounded-full pulse-dot shadow-[0_0_15px_rgba(123,208,255,0.8)]"></div>
+<div class="absolute -top-12 -left-1/2 -translate-x-1/2 bg-surface-container-highest px-3 py-1.5 rounded border border-primary/40 whitespace-nowrap opacity-0 group-hover/node:opacity-100 transition-opacity z-10">
+<div class="text-[10px] font-mono text-primary font-bold">NODE: NYC-EXCH-01</div>
+<div class="text-[9px] font-mono text-on-surface-variant">40.7128° N, 74.0060° W</div>
+</div>
+</div>
+<!-- London -->
+<div class="absolute top-[30%] left-[48%] group/node cursor-pointer">
+<div class="w-3 h-3 bg-primary rounded-full pulse-dot shadow-[0_0_15px_rgba(123,208,255,0.8)]"></div>
+<div class="absolute -top-12 -left-1/2 -translate-x-1/2 bg-surface-container-highest px-3 py-1.5 rounded border border-primary/40 whitespace-nowrap opacity-0 group-hover/node:opacity-100 transition-opacity z-10">
+<div class="text-[10px] font-mono text-primary font-bold">NODE: LDN-HUB-02</div>
+<div class="text-[9px] font-mono text-on-surface-variant">51.5074° N, 0.1278° W</div>
+</div>
+</div>
+<!-- Tokyo -->
+<div class="absolute top-[40%] left-[82%] group/node cursor-pointer">
+<div class="w-3 h-3 bg-primary rounded-full pulse-dot shadow-[0_0_15px_rgba(123,208,255,0.8)]"></div>
+<div class="absolute -top-12 -left-1/2 -translate-x-1/2 bg-surface-container-highest px-3 py-1.5 rounded border border-primary/40 whitespace-nowrap opacity-0 group-hover/node:opacity-100 transition-opacity z-10">
+<div class="text-[10px] font-mono text-primary font-bold">NODE: TYO-CORE-05</div>
+<div class="text-[9px] font-mono text-on-surface-variant">35.6762° N, 139.6503° E</div>
+</div>
+</div>
+<!-- Connection Lines SVG Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40">
+<path d="M 25% 35% Q 36% 25% 48% 30%" fill="none" stroke="#7bd0ff" stroke-dasharray="4 2" stroke-width="1.5"></path>
+<path d="M 48% 30% Q 65% 25% 82% 40%" fill="none" stroke="#7bd0ff" stroke-dasharray="4 2" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- Legend Overlay -->
+<div class="absolute bottom-6 left-6 p-4 bg-surface-container-highest/80 backdrop-blur-md rounded-lg border border-outline-variant/20">
+<h3 class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest mb-3">Network Legend</h3>
+<div class="space-y-2">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-xs font-mono">Active Exchange Node</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-xs font-mono">Local Cluster</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-6 h-0.5 border-t border-dashed border-primary"></span>
+<span class="text-xs font-mono">Fiber Optic Uplink</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: High-Density Metrics -->
+<div class="col-span-4 row-span-3 bg-surface-container-low rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-high/40">
+<h3 class="text-xs font-mono font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base" data-icon="hub">hub</span>
+                                TOPOLOGY_METRICS
+                            </h3>
+<span class="text-[10px] font-mono text-on-surface-variant">REFR: 500MS</span>
+</div>
+<div class="flex-1 overflow-y-auto">
+<table class="w-full text-left text-xs font-mono">
+<thead class="bg-surface-container-high/20 sticky top-0">
+<tr class="text-on-surface-variant">
+<th class="py-3 px-4 font-medium uppercase tracking-tighter">Connection</th>
+<th class="py-3 px-4 font-medium text-right uppercase tracking-tighter">Ping</th>
+<th class="py-3 px-4 font-medium text-right uppercase tracking-tighter">Loss</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-highest transition-colors group">
+<td class="py-3 px-4">
+<div class="text-primary font-bold">NYC ↔ LDN</div>
+<div class="text-[9px] text-on-surface-variant">Equinix NY4 / LD4</div>
+</td>
+<td class="py-3 px-4 text-right font-bold text-on-surface">63.12ms</td>
+<td class="py-3 px-4 text-right text-tertiary">0.00%</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors group">
+<td class="py-3 px-4">
+<div class="text-primary font-bold">LDN ↔ TYO</div>
+<div class="text-[9px] text-on-surface-variant">Telehouse South</div>
+</td>
+<td class="py-3 px-4 text-right font-bold text-on-surface">148.5ms</td>
+<td class="py-3 px-4 text-right text-tertiary">0.01%</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors group">
+<td class="py-3 px-4">
+<div class="text-primary font-bold">LOCAL ↔ AWS</div>
+<div class="text-[9px] text-on-surface-variant">Direct Connect</div>
+</td>
+<td class="py-3 px-4 text-right font-bold text-on-surface">1.04ms</td>
+<td class="py-3 px-4 text-right text-tertiary">0.00%</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors group">
+<td class="py-3 px-4">
+<div class="text-primary font-bold">CHI ↔ HKG</div>
+<div class="text-[9px] text-on-surface-variant">CME Group Feed</div>
+</td>
+<td class="py-3 px-4 text-right font-bold text-on-surface">184.2ms</td>
+<td class="py-3 px-4 text-right text-error">0.14%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Column Bottom: Throughput Visualizer -->
+<div class="col-span-4 row-span-3 bg-surface-container-low rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-high/40">
+<h3 class="text-xs font-mono font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-base" data-icon="speed">speed</span>
+                                THROUGHPUT_LENS
+                            </h3>
+<button class="material-symbols-outlined text-sm text-on-surface-variant hover:text-on-surface" data-icon="more_vert">more_vert</button>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div class="space-y-6">
+<!-- Progress Bar 1 -->
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono">
+<span class="text-on-surface-variant">DATA_CENTER_ALPHA</span>
+<span class="text-on-surface font-bold">8.4 Gbps / 10 Gbps</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 84%"></div>
+</div>
+</div>
+<!-- Progress Bar 2 -->
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono">
+<span class="text-on-surface-variant">EXCHANGE_FEED_DIRECT</span>
+<span class="text-on-surface font-bold">2.1 Gbps / 5 Gbps</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 42%"></div>
+</div>
+</div>
+<!-- Progress Bar 3 -->
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono">
+<span class="text-on-surface-variant">CLOUD_BACKUP_UPLINK</span>
+<span class="text-on-surface font-bold">450 Mbps / 1 Gbps</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 45%"></div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2 text-[10px] font-mono text-tertiary">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span>
+                                    All circuits operational with optimal redundancy
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Status Bar (Auxiliary Metrics) -->
+<div class="h-10 flex items-center gap-6 px-4 bg-surface-container-highest rounded-lg border border-outline-variant/20 text-[10px] font-mono">
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant uppercase tracking-widest">Active Links:</span>
+<span class="text-on-surface font-bold">42/42</span>
+</div>
+<div class="w-px h-4 bg-outline-variant/20"></div>
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant uppercase tracking-widest">Total BW:</span>
+<span class="text-on-surface font-bold">142.5 TB/Day</span>
+</div>
+<div class="w-px h-4 bg-outline-variant/20"></div>
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant uppercase tracking-widest">Global Status:</span>
+<span class="text-tertiary font-bold">OPTIMAL</span>
+</div>
+<div class="flex-1"></div>
+<div class="flex items-center gap-4">
+<span class="text-on-surface-variant">UTC: 14:02:44.829</span>
+<span class="px-2 py-0.5 bg-slate-950 text-sky-400 rounded border border-sky-900/50">SECURE_TUNNEL_ESTABLISHED</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

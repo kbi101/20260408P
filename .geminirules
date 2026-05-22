@@ -1,0 +1,82 @@
+# QuantEdge Studio: Project Rules & Knowledge Base
+
+## 📋 Project Context
+QuantEdge Studio is an institutional-grade trading and analytics platform featuring a **Volatility Lab** for GEX profiling and risk auditing.
+
+- **Architecture**: Hexagonal Architecture (quantitative logic decoupled from data adapters).
+- **Frontend**: React/TypeScript, "Scholar Ledger" clinical aesthetic (high-intensity, premium).
+- **Backend**: FastAPI, NaN/Inf resilient sanitization.
+- **Data**: Bronze (Parquet), Silver (DuckDB), QuestDB (Time-series), PostgreSQL (Relational/Metadata).
+- **Infrastructure**: Uses `docker-compose` with `.env.local`. Default service port reverted to **7689**.
+- **Orchestration**: Temporal.io (Dual-Queue Architecture).
+
+---
+
+## 🏗️ Orchestration & Queue Governance
+**CRITICAL**: All Temporal workflows MUST be routed to the correct queue to prevent "ghost workflows" (stuck in Running state).
+
+- **Queue Mapping**:
+  - `ingestion-tasks`: `Ingestion*`, `Scan*`, `ML*` (CPU-intensive Market Data/ML).
+  - `options-tasks`: `Options*` (Memory-intensive Analytics/GEX).
+- **Routing Logic**:
+  ```python
+  task_queue = "options-tasks" if "Options" in workflow_name else "ingestion-tasks"
+  ```
+- **Workflow Signatures**: Always use `input_data: dict = {}` in `run()` methods to prevent `TypeError`.
+- **Backfills**: `OptionsEnrichmentWorkflow` must support a `date` key in the input dictionary for manual re-runs.
+
+---
+
+## 🎨 Frontend & Design Standards
+- **Aesthetics**: "Scholar Ledger" clinical aesthetic. Modern typography (Inter/Roboto/Outfit), smooth gradients, micro-animations, and glassmorphism.
+- **Layout**: Use flat, direct-sibling DOM structures for complex layouts (e.g., `PatternBrowser`) to avoid clipping/overflow issues.
+- **Interactions**: **AVOID** native browser alerts or confirmation dialogs (`window.confirm`/`window.alert`). Use custom, state-based non-blocking confirmation flows (e.g., "Commit-to-Delete" button states) to prevent UI thread suspension and ensure consistent browser behavior.
+- **Performance**: Use dynamic designs with hover effects. Avoid generic colors; use curated HSL/Dark Mode palettes.
+
+---
+
+## 🐍 Backend & API Standards
+- **Connectivity**: 
+  - **CRITICAL**: All API servers (uvicorn/fastapi) MUST bind to `0.0.0.0` (not `127.0.0.1`) to ensure accessibility from other machines on the network.
+  - **CORS**: Always set `allow_credentials=False` when using `allow_origins=["*"]` to prevent browser-side blockages on cross-origin requests.
+- **Database Safety**: 
+  - Use **Global Async Connection Pooling** to prevent database connection leaks.
+  - PostgreSQL connection strings must support **schema-specific routing**.
+- **Data Integrity**: 
+  - **NaN/Inf Resilience**: Ensure all JSON responses are sanitized for numeric edge cases.
+  - **Phantom Strikes**: Implement the "Atmospheric Filter" to purge low-liquidity/noise strikes.
+  - **T+1 Settlement**: Options Open Interest (OI) settlement data MUST be attributed to the correct trading day (T+1 logic).
+- **Concurrency**: Offload CPU-intensive patterns to an asynchronous thread pool. Use Redis for redundant computation caching.
+
+---
+
+## 🌐 Networking & Deployment Standards
+- **Frontend API URLs**: **NEVER** hardcode `localhost` for API base URLs. Always implement dynamic hostname detection to ensure the UI correctly points back to the server when accessed via an IP address:
+  ```typescript
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+  const API_URL = `http://${hostname}:3101`;
+  ```
+- **Vite Configuration**: Ensure `server: { host: true }` is set in `vite.config.ts` to allow the dev server to listen on all interfaces.
+- **Docker Compose**: Map ports to `0.0.0.0` on the host and ensure internal services use `host.docker.internal` only for container-to-host communication.
+
+---
+
+## 🤖 ML Pipeline Rules
+- **Engine**: LightGBM (LGBMRegressor) v4.6.0+.
+- **Strategy**: **Growing (Daily Adaptive)** is preferred over Static. Retrain daily through T-1 to capture recent regime shifts while retaining historical depth (19,000+ pooled samples).
+- **Performance Threshold**: Minimum 80% Directional Accuracy (Target: 84%).
+- **Governance**: Every prediction must include a `targeted_accuracy` signature.
+
+---
+
+## ⚠️ Lessons Learned & Pitfalls to Avoid
+- **DO NOT** use `localhost` in production-ready frontend builds; it breaks accessibility from other computers.
+- **DO NOT** use `allow_credentials=True` with wildcard origins; it causes modern browsers to reject the connection.
+- **DO NOT** use nested deep-DOM wrappers for charts; it causes layout clipping.
+- **DO NOT** trigger API endpoints without respecting rate limits; use sequential processing for providers like Alpha Vantage.
+- **AVOID** background agentic services hogging GPU; decommission them when not in active use.
+- **AVOID** phantom strikes; always verify spot prices bypassing unreliable fast-info endpoints.
+- **ALWAYS** verify queue status using `scripts/audit_schedules.py` if tasks are stuck.
+
+---
+*Last Updated: 2026-05-05*

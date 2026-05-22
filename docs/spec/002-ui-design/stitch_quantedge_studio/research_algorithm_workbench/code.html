@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kinetic Ledger | Research Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#00668a",
+                        "on-tertiary-fixed": "#002113",
+                        "on-primary-container": "#008abb",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "primary": "#7bd0ff",
+                        "secondary-container": "#3e495d",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-primary": "#00354a",
+                        "background": "#0b1326",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "tertiary-container": "#001c10",
+                        "surface-container": "#171f33",
+                        "surface-container-highest": "#2d3449",
+                        "surface-bright": "#31394d",
+                        "primary-fixed": "#c4e7ff",
+                        "on-tertiary-container": "#009365",
+                        "surface-container-high": "#222a3d",
+                        "on-surface": "#dae2fd",
+                        "outline": "#909097",
+                        "on-error-container": "#ffdad6",
+                        "surface": "#0b1326",
+                        "surface-container-low": "#131b2e",
+                        "surface-variant": "#2d3449",
+                        "inverse-surface": "#dae2fd",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "surface-tint": "#7bd0ff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-primary-fixed": "#001e2c",
+                        "on-background": "#dae2fd",
+                        "on-tertiary": "#003824",
+                        "on-secondary": "#263143",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "primary-container": "#001a27",
+                        "tertiary": "#4edea3",
+                        "outline-variant": "#45464d",
+                        "surface-dim": "#0b1326",
+                        "inverse-on-surface": "#283044",
+                        "secondary-fixed": "#d8e3fb",
+                        "surface-container-lowest": "#060e20",
+                        "secondary": "#bcc7de",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-secondary-container": "#aeb9d0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 1.25rem;
+        }
+        .mono-nums { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0b1326; }
+        ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7bd0ff; }
+        .pulse-indicator {
+            position: relative;
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #4edea3;
+            border-radius: 50%;
+        }
+        .pulse-indicator::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #4edea3;
+            border-radius: 50%;
+            opacity: 0.6;
+            transform: scale(1);
+            animation: ripple 2s infinite ease-out;
+        }
+        @keyframes ripple {
+            to { transform: scale(3); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 h-screen flex flex-col overflow-hidden">
+<!-- TopAppBar -->
+<header class="w-full h-14 border-b border-slate-800/50 bg-slate-900/40 backdrop-blur-md flex justify-between items-center px-6 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold text-sky-400 tracking-tighter font-headline">Kinetic Ledger</span>
+<nav class="hidden md:flex items-center h-full gap-6">
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-headline text-sm tracking-tight" href="#">System Status</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-headline text-sm tracking-tight" href="#">Network</a>
+<a class="text-sky-400 border-b-2 border-sky-400 h-full flex items-center font-headline text-sm tracking-tight" href="#">Compute</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-surface-container-highest/30 px-3 py-1 flex items-center gap-2 rounded">
+<span class="pulse-indicator"></span>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-mono">Kernel v4.2.1-Stable</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-400 hover:text-sky-400 transition-all duration-150 ease-in-out">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-sky-400 transition-all duration-150 ease-in-out">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant/20">
+<span class="material-symbols-outlined text-sky-400">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 border-r border-slate-800/50 bg-slate-950/80 flex flex-col sticky left-0 top-0 overflow-y-auto shrink-0">
+<div class="p-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<div class="font-headline font-bold text-slate-100 text-sm">Quant Studio</div>
+<div class="text-[10px] text-slate-500 font-mono">v4.2.1-stable</div>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-on-primary-container text-on-primary-fixed py-2 rounded font-medium text-sm transition-all active:scale-95 duration-75 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Strategy
+                </button>
+</div>
+<nav class="flex-1 py-4">
+<div class="px-3 mb-2 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Main Workflow</div>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 transition-all" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-medium text-sm">Data Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-slate-900 text-sky-400 border-l-2 border-sky-400 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">science</span>
+<span class="font-medium text-sm">Research Lab</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 transition-all" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-medium text-sm">Backtesting</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 transition-all" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="font-medium text-sm">Live Trading</span>
+</a>
+<div class="mt-6 px-3 mb-2 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Research Scripts</div>
+<div class="px-4 py-2 space-y-1">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant hover:text-primary cursor-pointer py-1">
+<span class="material-symbols-outlined text-[16px]">folder</span>
+<span>momentum_strategies</span>
+</div>
+<div class="flex items-center gap-2 text-xs text-on-surface hover:text-primary cursor-pointer py-1 bg-surface-container-high/50 rounded px-2 -mx-2">
+<span class="material-symbols-outlined text-[16px] text-amber-400">description</span>
+<span>mean_reversion_v2.py</span>
+</div>
+<div class="flex items-center gap-2 text-xs text-on-surface-variant hover:text-primary cursor-pointer py-1">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>volatility_arb.py</span>
+</div>
+</div>
+</nav>
+<div class="p-4 border-t border-outline-variant/10 space-y-2">
+<a class="flex items-center gap-3 text-slate-500 hover:text-slate-300 text-sm" href="#">
+<span class="material-symbols-outlined text-sm">terminal</span>
+                    Terminal
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:text-slate-300 text-sm" href="#">
+<span class="material-symbols-outlined text-sm">menu_book</span>
+                    Docs
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:text-slate-300 text-sm" href="#">
+<span class="material-symbols-outlined text-sm">contact_support</span>
+                    Support
+                </a>
+</div>
+</aside>
+<!-- Main Content Area: IDE Layout -->
+<main class="flex-1 flex flex-col bg-surface overflow-hidden">
+<!-- Context Header -->
+<div class="h-10 border-b border-outline-variant/10 bg-surface-container-low flex items-center px-4 justify-between">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="flex items-center gap-2 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-xs">folder_open</span>
+<span class="whitespace-nowrap">strategies / research /</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-highest px-3 py-1 rounded-t border-b-2 border-primary">
+<span class="text-xs font-mono text-primary">mean_reversion_v2.py</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant cursor-pointer hover:text-error transition-colors">close</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1 px-3 py-1 bg-tertiary/10 text-tertiary rounded border border-tertiary/20 text-xs font-medium hover:bg-tertiary/20 transition-all">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+                        Run Strategy
+                    </button>
+<button class="p-1 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-sm">share</span>
+</button>
+</div>
+</div>
+<!-- Workspace: Editor and Charts -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Editor Pane -->
+<div class="flex-[3] flex flex-col border-r border-outline-variant/10 bg-surface-container-lowest">
+<div class="flex-1 font-mono text-sm p-4 overflow-y-auto leading-relaxed selection:bg-primary/20">
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">1</span>
+<span class="text-on-surface-variant italic"># Strategy: Mean Reversion with Bollinger Bands</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">2</span>
+<span class="text-primary-fixed"><span class="text-secondary">import</span> numpy <span class="text-secondary">as</span> np</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">3</span>
+<span class="text-primary-fixed"><span class="text-secondary">import</span> pandas <span class="text-secondary">as</span> pd</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">4</span>
+<span> </span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">5</span>
+<span class="text-secondary">class</span> <span class="text-tertiary">MeanReversion</span>:
+                        </div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">6</span>
+<span class="pl-4 text-secondary">def</span> <span class="text-primary">__init__</span>(self, period=20, std_dev=2.0):
+                        </div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">7</span>
+<span class="pl-8">self.period = period</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">8</span>
+<span class="pl-8">self.std_dev = std_dev</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">9</span>
+<span> </span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">10</span>
+<span class="pl-4 text-secondary">def</span> <span class="text-primary">calculate_bands</span>(self, data):
+                        </div>
+<div class="flex gap-4 group bg-primary/5 border-l-2 border-primary -ml-4 pl-4">
+<span class="text-primary text-right w-8 select-none">11</span>
+<span class="pl-8">sma = data[<span class="text-error-container text-on-error-container px-1 rounded">'close'</span>].rolling(self.period).mean()</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">12</span>
+<span class="pl-8">std = data[<span class="text-error-container text-on-error-container px-1 rounded">'close'</span>].rolling(self.period).std()</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">13</span>
+<span class="pl-8">upper = sma + (std * self.std_dev)</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">14</span>
+<span class="pl-8">lower = sma - (std * self.std_dev)</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-outline-variant text-right w-8 select-none">15</span>
+<span class="pl-8 text-secondary">return</span> upper, lower
+</div>
+</div>
+</div>
+<!-- Visualization Pane -->
+<div class="flex-[2] flex flex-col bg-surface-container-low min-w-[400px]">
+<div class="flex items-center justify-between px-4 py-2 bg-surface-container-high/50 border-b border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">Real-time Visualizer</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] text-tertiary font-mono">BTCUSD: $64,231.50</span>
+<div class="flex border border-outline-variant/30 rounded overflow-hidden">
+<button class="px-2 py-0.5 bg-surface-container-highest text-[10px] text-on-surface">1m</button>
+<button class="px-2 py-0.5 hover:bg-surface-container-highest text-[10px] text-on-surface-variant">5m</button>
+<button class="px-2 py-0.5 hover:bg-surface-container-highest text-[10px] text-on-surface-variant">1h</button>
+</div>
+</div>
+</div>
+<!-- Candlestick Chart Area -->
+<div class="flex-1 relative p-4 flex flex-col gap-4">
+<!-- Main Candle Display -->
+<div class="flex-1 relative border border-outline-variant/10 rounded overflow-hidden">
+<div class="absolute inset-0 grid grid-cols-8 grid-rows-6 pointer-events-none opacity-5">
+<div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div>
+<div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div>
+<div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div>
+<div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div>
+<div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div>
+<div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div><div class="border-r border-b border-on-surface"></div>
+</div>
+<div class="absolute inset-0 flex items-end p-2 gap-1.5 overflow-hidden">
+<div class="w-2.5 h-[60%] bg-tertiary/60 relative"><div class="absolute top-[-10px] left-1/2 w-0.5 h-[120%] bg-tertiary"></div></div>
+<div class="w-2.5 h-[45%] bg-error/60 relative"><div class="absolute top-[-5px] left-1/2 w-0.5 h-[110%] bg-error"></div></div>
+<div class="w-2.5 h-[55%] bg-tertiary/60 relative"><div class="absolute top-[-8px] left-1/2 w-0.5 h-[115%] bg-tertiary"></div></div>
+<div class="w-2.5 h-[70%] bg-tertiary/60 relative"><div class="absolute top-[-12px] left-1/2 w-0.5 h-[130%] bg-tertiary"></div></div>
+<div class="w-2.5 h-[50%] bg-error/60 relative"><div class="absolute top-[-4px] left-1/2 w-0.5 h-[105%] bg-error"></div></div>
+<div class="w-2.5 h-[35%] bg-error/60 relative"><div class="absolute top-[-2px] left-1/2 w-0.5 h-[100%] bg-error"></div></div>
+<div class="w-2.5 h-[40%] bg-tertiary/60 relative"><div class="absolute top-[-6px] left-1/2 w-0.5 h-[110%] bg-tertiary"></div></div>
+<div class="w-2.5 h-[65%] bg-tertiary/60 relative"><div class="absolute top-[-10px] left-1/2 w-0.5 h-[120%] bg-tertiary"></div></div>
+<div class="w-2.5 h-[58%] bg-tertiary/60 relative border border-primary shadow-[0_0_10px_rgba(123,208,255,0.3)]"><div class="absolute top-[-5px] left-1/2 w-0.5 h-[110%] bg-primary"></div></div>
+</div>
+<!-- Bollinger Bands (Decorative SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-30" preserveaspectratio="none">
+<path d="M0,100 Q150,120 300,80 T600,110" fill="none" stroke="#7bd0ff" stroke-width="1.5"></path>
+<path d="M0,150 Q150,170 300,130 T600,160" fill="none" stroke="#7bd0ff" stroke-width="1.5"></path>
+<path d="M0,200 Q150,220 300,180 T600,210" fill="none" stroke="#7bd0ff" stroke-width="1.5"></path>
+</svg>
+<div class="absolute top-2 left-2 flex gap-2">
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[8px] border border-outline-variant/30">BB (20, 2)</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[8px] border border-outline-variant/30">SMA (50)</span>
+</div>
+</div>
+<!-- RSI / MACD Indicators -->
+<div class="h-24 border border-outline-variant/10 rounded relative overflow-hidden bg-surface-container-lowest/50">
+<div class="absolute top-1 left-2 text-[8px] text-on-surface-variant uppercase font-bold">RSI (14)</div>
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none">
+<line stroke="#45464d" stroke-dasharray="4" x1="0" x2="100%" y1="30%" y2="30%"></line>
+<line stroke="#45464d" stroke-dasharray="4" x1="0" x2="100%" y1="70%" y2="70%"></line>
+<path d="M0,50 L50,40 L100,60 L150,30 L200,45 L250,55 L300,25 L400,65" fill="none" stroke="#4edea3" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<div class="grid grid-cols-3 divide-x divide-outline-variant/10 border-t border-outline-variant/10">
+<div class="p-3 text-center">
+<div class="text-[9px] text-on-surface-variant uppercase tracking-tighter">Win Rate</div>
+<div class="mono-nums text-lg font-bold text-tertiary">68.4%</div>
+</div>
+<div class="p-3 text-center">
+<div class="text-[9px] text-on-surface-variant uppercase tracking-tighter">Drawdown</div>
+<div class="mono-nums text-lg font-bold text-error">-2.1%</div>
+</div>
+<div class="p-3 text-center">
+<div class="text-[9px] text-on-surface-variant uppercase tracking-tighter">Profit Factor</div>
+<div class="mono-nums text-lg font-bold text-primary">1.82</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer: Research Logs Console -->
+<div class="h-40 border-t border-slate-800 bg-slate-950 flex flex-col shrink-0">
+<div class="h-8 border-b border-outline-variant/10 flex items-center px-4 justify-between bg-surface-container">
+<div class="flex items-center gap-4">
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">terminal</span>
+                            Research Logs
+                        </span>
+<div class="flex items-center gap-3">
+<span class="text-[10px] text-on-surface-variant cursor-pointer hover:text-on-surface">Console</span>
+<span class="text-[10px] text-on-surface font-bold border-b border-primary cursor-pointer">Problems (0)</span>
+<span class="text-[10px] text-on-surface-variant cursor-pointer hover:text-on-surface">Terminal</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-on-surface-variant cursor-pointer">block</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant cursor-pointer">close</span>
+</div>
+</div>
+<div class="flex-1 p-3 overflow-y-auto font-mono text-xs space-y-1 bg-surface-container-lowest/80">
+<div class="flex gap-3 text-on-surface-variant">
+<span class="text-outline-variant">[14:02:01.42]</span>
+<span class="text-tertiary-fixed-dim">INFO:</span>
+<span>Initializing Kinetic Ledger Engine v4.2.1...</span>
+</div>
+<div class="flex gap-3 text-on-surface-variant">
+<span class="text-outline-variant">[14:02:02.15]</span>
+<span class="text-tertiary-fixed-dim">INFO:</span>
+<span>Connection to Binance Websocket established. Latency: 42ms</span>
+</div>
+<div class="flex gap-3 text-on-surface-variant">
+<span class="text-outline-variant">[14:02:05.88]</span>
+<span class="text-on-primary-container">EXEC:</span>
+<span>Compiling <span class="text-primary underline">mean_reversion_v2.py</span>... OK</span>
+</div>
+<div class="flex gap-3 text-on-surface-variant bg-surface-container-high/50 -mx-3 px-3 py-0.5">
+<span class="text-outline-variant">[14:02:06.12]</span>
+<span class="text-tertiary">SIGNAL:</span>
+<span class="font-bold text-tertiary">LONG SIGNAL GENERATED @ 64231.50 (Strength: 82%)</span>
+</div>
+<div class="flex gap-3 text-on-surface-variant">
+<span class="text-outline-variant">[14:02:06.15]</span>
+<span class="text-tertiary-fixed-dim">INFO:</span>
+<span>Waiting for next candle close to confirm signal...</span>
+</div>
+<div class="flex gap-3 text-on-surface-variant">
+<span class="text-outline-variant">[14:02:10.00]</span>
+<span class="text-outline">STDBY:</span>
+<span class="animate-pulse">_</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
