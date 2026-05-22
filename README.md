@@ -1,6 +1,9 @@
-# QuantEdge Studio: The Kinetic Ledger 🏛️
+# QuantEdge Studio: Documentation, DevOps & SQL 🏛️
 
-**QuantEdge Studio** is an institutional-grade quantitative research and execution terminal designed for high-conviction volatility auditing, structural pattern discovery, and ensemble strategy orchestration.
+> [!NOTE]
+> This repository contains the documentation, DevOps infrastructure configurations, and SQL database migrations for **QuantEdge Studio**.
+>
+> QuantEdge Studio is an institutional-grade quantitative research and execution terminal designed for high-conviction volatility auditing, structural pattern discovery, and ensemble strategy orchestration.
 
 ---
 
